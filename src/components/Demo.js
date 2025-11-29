@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 const Demo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [fileType, setFileType] = useState('pdf');
   const [showOutput, setShowOutput] = useState(false);
   const [extractedData, setExtractedData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -30,9 +29,8 @@ const Demo = () => {
     try {
       const base64 = await convertToBase64(selectedFile);
       
-      // Add timeout to fetch request
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
       
       const response = await fetch('https://nrkg7cmta3.execute-api.ap-south-1.amazonaws.com/dev/praneeth', {
         method: 'POST',
@@ -57,7 +55,6 @@ const Demo = () => {
       const data = await response.json();
       console.log('API Response:', data);
       
-      // Parse the actual resume data from the body field
       let resumeData;
       if (data.body) {
         resumeData = JSON.parse(data.body);
@@ -131,20 +128,30 @@ const Demo = () => {
               )}
             </div>
 
-
-
-            <button 
-              className="btn btn-primary"
-              onClick={handleExtract}
-              disabled={!selectedFile || isProcessing}
-              style={{ 
-                width: '100%',
-                opacity: (!selectedFile || isProcessing) ? 0.6 : 1,
-                cursor: (!selectedFile || isProcessing) ? 'not-allowed' : 'pointer'
-              }}
-            >
-              {isProcessing ? 'Processing...' : 'Extract Resume Data'}
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button 
+                className="btn btn-primary"
+                onClick={handleExtract}
+                disabled={!selectedFile || isProcessing}
+                style={{ 
+                  flex: 1,
+                  opacity: (!selectedFile || isProcessing) ? 0.6 : 1,
+                  cursor: (!selectedFile || isProcessing) ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {isProcessing ? 'Processing...' : 'Extract Resume Data'}
+              </button>
+              
+              {(selectedFile || showOutput) && (
+                <button 
+                  className="btn btn-secondary"
+                  onClick={handleClear}
+                  disabled={isProcessing}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
 
             {error && (
               <p style={{ fontSize: '0.9rem', color: '#ef4444', marginTop: '16px' }}>
@@ -224,35 +231,6 @@ const Demo = () => {
                 )}
                 
                 {extractedData.achievements && extractedData.achievements.length > 0 && (
-                  <div style={{ marginBottom: '20px' }}>
-                    <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Achievements</h4>
-                    {extractedData.achievements.map((achievement, index) => (
-                      <p key={index}>• {achievement}</p>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div style={{
-                background: 'rgba(0, 0, 0, 0.2)',
-                borderRadius: '8px',
-                padding: '60px 20px',
-                textAlign: 'center',
-                color: '#64748b',
-                border: '1px dashed rgba(255, 255, 255, 0.2)'
-              }}>
-                <div style={{ fontSize: '2rem', marginBottom: '16px' }}>⚡</div>
-                <p>Upload a resume and click "Extract Resume Data" to see the structured output</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default Demo;
                   <div style={{ marginBottom: '20px' }}>
                     <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Achievements</h4>
                     {extractedData.achievements.map((achievement, index) => (
