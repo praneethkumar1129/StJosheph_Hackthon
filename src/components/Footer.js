@@ -37,15 +37,17 @@ const Footer = () => {
             marginBottom: '40px',
             flexWrap: 'wrap'
           }}>
-            <a 
-              href="#" 
+            <button 
+              type="button"
               style={{ 
                 color: '#94a3b8', 
                 textDecoration: 'none',
                 padding: '8px 16px',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 borderRadius: '6px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                background: 'transparent',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.color = '#06b6d4';
@@ -57,16 +59,18 @@ const Footer = () => {
               }}
             >
               📚 Documentation (Coming Soon)
-            </a>
-            <a 
-              href="#" 
+            </button>
+            <button 
+              type="button"
               style={{ 
                 color: '#94a3b8', 
                 textDecoration: 'none',
                 padding: '8px 16px',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 borderRadius: '6px',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                background: 'transparent',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.target.style.color = '#06b6d4';
@@ -78,7 +82,7 @@ const Footer = () => {
               }}
             >
               🔗 GitHub Repo (Coming Soon)
-            </a>
+            </button>
           </div>
 
           <div style={{ 
