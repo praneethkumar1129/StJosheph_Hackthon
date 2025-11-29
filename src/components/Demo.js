@@ -253,3 +253,32 @@ const Demo = () => {
 };
 
 export default Demo;
+                  <div style={{ marginBottom: '20px' }}>
+                    <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Achievements</h4>
+                    {extractedData.achievements.map((achievement, index) => (
+                      <p key={index}>• {achievement}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{
+                background: 'rgba(0, 0, 0, 0.2)',
+                borderRadius: '8px',
+                padding: '60px 20px',
+                textAlign: 'center',
+                color: '#64748b',
+                border: '1px dashed rgba(255, 255, 255, 0.2)'
+              }}>
+                <div style={{ fontSize: '2rem', marginBottom: '16px' }}>⚡</div>
+                <p>Upload a resume and click "Extract Resume Data" to see the structured output</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Demo;
