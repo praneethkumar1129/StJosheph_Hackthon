@@ -1,23 +1,6 @@
 import React from 'react';
 
 const Team = () => {
-  const teamMembers = [
-    {
-      name: 'Yeturi Praneeth Kumar',
-      role: 'Team Leader / SPOC',
-      department: 'Computer Science Engineering',
-      college: 'St. Joseph\'s College of Engineering',
-      initials: 'YPK'
-    },
-    {
-      name: 'Palem Narasimha',
-      role: 'Team Member',
-      department: 'Computer Science Engineering', 
-      college: 'St. Joseph\'s College of Engineering',
-      initials: 'PN'
-    }
-  ];
-
   return (
     <section id="team" className="section">
       {/* <div className="container">

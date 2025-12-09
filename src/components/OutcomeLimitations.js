@@ -1,23 +1,6 @@
 import React from 'react';
 
 const OutcomeLimitations = () => {
-  const outcomes = [
-    'Serverless architecture with automatic scaling',
-    'AI-powered extraction using Amazon Bedrock Titan LLM',
-    'Consistent structured JSON with 15+ data fields',
-    'High-accuracy OCR with AWS Textract',
-    'Useful for placement cells, HR teams, and recruitment platforms',
-    'Cost-effective pay-per-use pricing model'
-  ];
-
-  const limitations = [
-    'Currently supports PDF format only (DOCX not supported)',
-    'Text extraction limited to 3000 characters for processing',
-    'Accuracy depends on PDF quality and formatting',
-    'Some fields may be empty if not present in resume',
-    'Requires AWS account and proper IAM permissions'
-  ];
-
   return (
     <section className="section">
       <div className="container">
