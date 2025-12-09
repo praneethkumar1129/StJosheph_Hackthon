@@ -20,7 +20,7 @@ const Team = () => {
 
   return (
     <section id="team" className="section">
-      <div className="container">
+      {/* <div className="container">
         <h2 className="text-center mb-8">Meet Team DataForge</h2>
         
         <div className="card mb-8">
@@ -100,7 +100,7 @@ const Team = () => {
             SPOC: Yeturi Praneeth Kumar
           </p>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };

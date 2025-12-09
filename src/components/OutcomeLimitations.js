@@ -2,27 +2,27 @@ import React from 'react';
 
 const OutcomeLimitations = () => {
   const outcomes = [
-    'Reduced manual resume processing time by 90%',
-    'Consistent structured JSON data format',
-    'Multi-format support including scanned images',
-    'Useful for placement cells and HR teams',
-    'Scalable solution for bulk resume processing',
-    'Extendable with additional training data'
+    'Serverless architecture with automatic scaling',
+    'AI-powered extraction using Amazon Bedrock Titan LLM',
+    'Consistent structured JSON with 15+ data fields',
+    'High-accuracy OCR with AWS Textract',
+    'Useful for placement cells, HR teams, and recruitment platforms',
+    'Cost-effective pay-per-use pricing model'
   ];
 
   const limitations = [
-    'Accuracy depends on resume formatting and text clarity',
-    'Scanned images may require manual correction',
-    'Some fields may not be present in every resume',
-    'Complex layouts might affect extraction quality',
-    'OCR performance varies with image quality'
+    'Currently supports PDF format only (DOCX not supported)',
+    'Text extraction limited to 3000 characters for processing',
+    'Accuracy depends on PDF quality and formatting',
+    'Some fields may be empty if not present in resume',
+    'Requires AWS account and proper IAM permissions'
   ];
 
   return (
     <section className="section">
       <div className="container">
         <div className="grid grid-2">
-          <div className="card" style={{ borderLeft: '4px solid #10b981' }}>
+          {/* <div className="card" style={{ borderLeft: '4px solid #10b981' }}>
             <h3 style={{ color: '#10b981', marginBottom: '24px' }}>
               🎯 Expected Outcomes
             </h3>
@@ -48,9 +48,9 @@ const OutcomeLimitations = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
-          <div className="card" style={{ borderLeft: '4px solid #f59e0b' }}>
+          {/* <div className="card" style={{ borderLeft: '4px solid #f59e0b' }}>
             <h3 style={{ color: '#f59e0b', marginBottom: '24px' }}>
               ⚠️ Limitations
             </h3>
@@ -76,10 +76,10 @@ const OutcomeLimitations = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
 
-        <div className="card mt-8 text-center">
+        {/* <div className="card mt-8 text-center">
           <h3 className="mb-4">Performance Metrics</h3>
           <div className="grid grid-4">
             <div>
@@ -96,9 +96,9 @@ const OutcomeLimitations = () => {
             </div>
             <div>
               <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#f59e0b', marginBottom: '8px' }}>
-                3
+                PDF
               </div>
-              <p style={{ color: '#94a3b8' }}>File Formats</p>
+              <p style={{ color: '#94a3b8' }}>File Format</p>
             </div>
             <div>
               <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '8px' }}>
@@ -107,7 +107,7 @@ const OutcomeLimitations = () => {
               <p style={{ color: '#94a3b8' }}>Data Fields</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

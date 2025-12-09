@@ -18,7 +18,7 @@ const Demo = () => {
 
   const handleExtract = async () => {
     if (!selectedFile) {
-      setError('Please select a file first');
+      setError('Please select a PDF file first');
       return;
     }
 
@@ -34,50 +34,36 @@ const Demo = () => {
       
       const response = await fetch('https://nrkg7cmta3.execute-api.ap-south-1.amazonaws.com/dev/praneeth', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fileContentBase64: base64
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileContentBase64: base64 }),
         signal: controller.signal
       });
       
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        if (response.status === 504) {
-          throw new Error('Request timed out. Please try with a smaller file or try again.');
-        }
-        throw new Error(`API Error: ${response.status}`);
+        throw new Error(response.status === 504 ? 'Request timed out' : `API Error: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('API Response:', data);
+      const resumeData = data.body ? JSON.parse(data.body) : data;
       
-      let resumeData;
-      if (data.body) {
-        resumeData = JSON.parse(data.body);
-      } else {
-        resumeData = data;
-      }
-      
-      console.log('Parsed Resume Data:', resumeData);
       setExtractedData(resumeData);
       setShowOutput(true);
     } catch (err) {
-      if (err.name === 'AbortError') {
-        setError('Request timed out. Please try with a smaller file.');
-      } else {
-        setError(`Error processing file: ${err.message}`);
-      }
+      setError(err.name === 'AbortError' ? 'Request timed out' : `Error: ${err.message}`);
     } finally {
       setIsProcessing(false);
     }
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file && file.type !== 'application/pdf') {
+      setError('Only PDF files are supported');
+      return;
+    }
+    setSelectedFile(file);
     setShowOutput(false);
     setError(null);
   };
@@ -89,6 +75,27 @@ const Demo = () => {
     setError(null);
     document.getElementById('file-upload').value = '';
   };
+
+  const InfoCard = ({ icon, title, children }) => (
+    <div style={{
+      background: 'rgba(6, 182, 212, 0.1)',
+      border: '1px solid rgba(6, 182, 212, 0.3)',
+      borderRadius: '12px',
+      padding: '20px',
+      marginBottom: '16px'
+    }}>
+      <h4 style={{ color: '#06b6d4', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <span>{icon}</span> {title}
+      </h4>
+      {children}
+    </div>
+  );
+
+  const DataRow = ({ label, value }) => value ? (
+    <p style={{ marginBottom: '8px', lineHeight: '1.6' }}>
+      <strong style={{ color: '#94a3b8' }}>{label}:</strong> <span style={{ color: '#f8fafc' }}>{value}</span>
+    </p>
+  ) : null;
 
   return (
     <section id="demo" className="section">
@@ -113,7 +120,7 @@ const Demo = () => {
               </p>
               <input
                 type="file"
-                accept=".pdf,.docx,.jpg,.jpeg,.png"
+                accept=".pdf"
                 onChange={handleFileChange}
                 style={{ display: 'none' }}
                 id="file-upload"
@@ -159,8 +166,9 @@ const Demo = () => {
               </p>
             )}
 
-            <p style={{ fontSize: '0.9rem', color: '#64748b', marginTop: '16px' }}>
-              * AI-powered extraction using AWS Textract and Bedrock
+            <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '16px', lineHeight: '1.5' }}>
+              ⚡ AI-powered extraction using AWS Textract & Bedrock<br/>
+              📄 PDF files only (convert DOC/DOCX to PDF first)
             </p>
           </div>
 
@@ -181,62 +189,95 @@ const Demo = () => {
               </div>
             ) : showOutput && extractedData ? (
               <div style={{
-                background: 'rgba(0, 0, 0, 0.1)',
-                borderRadius: '8px',
-                padding: '20px',
-                maxHeight: '500px',
-                overflow: 'auto',
-                border: '1px solid rgba(6, 182, 212, 0.3)'
+                background: 'rgba(0, 0, 0, 0.2)',
+                borderRadius: '12px',
+                padding: '24px',
+                maxHeight: '600px',
+                overflow: 'auto'
               }}>
-                <div style={{ marginBottom: '20px' }}>
-                  <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Personal Information</h4>
-                  <p><strong>Name:</strong> {extractedData.name || 'Not found'}</p>
-                  <p><strong>Email:</strong> {extractedData.email || 'Not found'}</p>
-                  <p><strong>Phone:</strong> {extractedData.phoneNumber || 'Not found'}</p>
-                </div>
-                
-                <div style={{ marginBottom: '20px' }}>
-                  <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>High School</h4>
-                  <p><strong>School:</strong> {extractedData.highSchoolName || 'Not found'}</p>
-                  <p><strong>Address:</strong> {extractedData.highSchoolAddress || 'Not found'}</p>
-                  <p><strong>GPA:</strong> {extractedData.highSchoolGpaOrPercentage || 'Not found'}</p>
-                  <p><strong>Graduation Year:</strong> {extractedData.highSchoolGraduationYear || 'Not found'}</p>
-                </div>
-                
-                <div style={{ marginBottom: '20px' }}>
-                  <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Undergraduate</h4>
-                  <p><strong>College:</strong> {extractedData.ugCollegeName || 'Not found'}</p>
-                  <p><strong>Degree:</strong> {extractedData.ugDegree || 'Not found'}</p>
-                  <p><strong>Major:</strong> {extractedData.ugMajor || 'Not found'}</p>
-                  <p><strong>GPA:</strong> {extractedData.ugCollegeGpaOrPercentage || 'Not found'}</p>
-                  <p><strong>Graduation Year:</strong> {extractedData.ugGraduationYear || 'Not found'}</p>
-                </div>
-                
-                <div style={{ marginBottom: '20px' }}>
-                  <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Postgraduate</h4>
-                  <p><strong>College:</strong> {extractedData.pgCollegeName || 'Not found'}</p>
-                  <p><strong>Degree:</strong> {extractedData.pgDegree || 'Not found'}</p>
-                  <p><strong>Major:</strong> {extractedData.pgMajor || 'Not found'}</p>
-                  <p><strong>GPA:</strong> {extractedData.pgCollegeGpaOrPercentage || 'Not found'}</p>
-                  <p><strong>Graduation Year:</strong> {extractedData.pgGraduationYear || 'Not found'}</p>
-                </div>
-                
-                {extractedData.certifications && extractedData.certifications.length > 0 && (
-                  <div style={{ marginBottom: '20px' }}>
-                    <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Certifications</h4>
-                    {extractedData.certifications.map((cert, index) => (
-                      <p key={index}>• {cert}</p>
-                    ))}
-                  </div>
+                <InfoCard icon="👤" title="Personal Information">
+                  <DataRow label="Name" value={extractedData.name} />
+                  <DataRow label="Email" value={extractedData.email} />
+                  <DataRow label="Phone" value={extractedData.phoneNumber} />
+                </InfoCard>
+
+                {extractedData.highSchoolName && (
+                  <InfoCard icon="🏫" title="High School">
+                    <DataRow label="School" value={extractedData.highSchoolName} />
+                    <DataRow label="Address" value={extractedData.highSchoolAddress} />
+                    <DataRow label="Board" value={extractedData.highSchoolBoard} />
+                    <DataRow label="GPA" value={extractedData.highSchoolGpaOrPercentage} />
+                    <DataRow label="Graduation Year" value={extractedData.highSchoolGraduationYear} />
+                  </InfoCard>
                 )}
-                
-                {extractedData.achievements && extractedData.achievements.length > 0 && (
-                  <div style={{ marginBottom: '20px' }}>
-                    <h4 style={{ color: '#06b6d4', marginBottom: '10px' }}>Achievements</h4>
-                    {extractedData.achievements.map((achievement, index) => (
-                      <p key={index}>• {achievement}</p>
+
+                {extractedData.ugCollegeName && (
+                  <InfoCard icon="🎓" title="Undergraduate Education">
+                    <DataRow label="College" value={extractedData.ugCollegeName} />
+                    <DataRow label="Address" value={extractedData.ugCollegeAddress} />
+                    <DataRow label="Degree" value={extractedData.ugDegree} />
+                    <DataRow label="Major" value={extractedData.ugMajor} />
+                    <DataRow label="University" value={extractedData.ugUniversity} />
+                    <DataRow label="GPA" value={extractedData.ugCollegeGpaOrPercentage} />
+                    <DataRow label="Graduation Year" value={extractedData.ugGraduationYear} />
+                  </InfoCard>
+                )}
+
+                {extractedData.pgCollegeName && (
+                  <InfoCard icon="🎯" title="Postgraduate Education">
+                    <DataRow label="College" value={extractedData.pgCollegeName} />
+                    <DataRow label="Address" value={extractedData.pgCollegeAddress} />
+                    <DataRow label="Degree" value={extractedData.pgDegree} />
+                    <DataRow label="Major" value={extractedData.pgMajor} />
+                    <DataRow label="University" value={extractedData.pgUniversity} />
+                    <DataRow label="GPA" value={extractedData.pgCollegeGpaOrPercentage} />
+                    <DataRow label="Graduation Year" value={extractedData.pgGraduationYear} />
+                  </InfoCard>
+                )}
+
+                {extractedData.workExperience?.length > 0 && (
+                  <InfoCard icon="💼" title="Work Experience">
+                    {extractedData.workExperience.map((exp, i) => (
+                      <div key={i} style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: i < extractedData.workExperience.length - 1 ? '1px solid rgba(148, 163, 184, 0.2)' : 'none' }}>
+                        <DataRow label="Company" value={exp.company} />
+                        <DataRow label="Position" value={exp.position} />
+                        <DataRow label="Duration" value={`${exp.startDate || ''} - ${exp.endDate || 'Present'}`} />
+                      </div>
                     ))}
-                  </div>
+                  </InfoCard>
+                )}
+
+                {extractedData.certifications?.length > 0 && (
+                  <InfoCard icon="📜" title="Certifications">
+                    {extractedData.certifications.map((cert, i) => (
+                      <div key={i} style={{ marginBottom: '10px', paddingLeft: '12px', borderLeft: '3px solid rgba(6, 182, 212, 0.5)' }}>
+                        <p style={{ color: '#f8fafc', marginBottom: '4px' }}>{typeof cert === 'string' ? cert : cert.name}</p>
+                        {cert.date && <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>📅 {cert.date}</p>}
+                      </div>
+                    ))}
+                  </InfoCard>
+                )}
+
+                {extractedData.achievements?.length > 0 && (
+                  <InfoCard icon="🏆" title="Achievements">
+                    {extractedData.achievements.map((ach, i) => (
+                      <div key={i} style={{ marginBottom: '10px', paddingLeft: '12px', borderLeft: '3px solid rgba(6, 182, 212, 0.5)' }}>
+                        <p style={{ color: '#f8fafc', marginBottom: '4px' }}>{typeof ach === 'string' ? ach : ach.name}</p>
+                        {ach.date && <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>📅 {ach.date}</p>}
+                      </div>
+                    ))}
+                  </InfoCard>
+                )}
+
+                {(extractedData.testScores?.sat || extractedData.testScores?.gre || extractedData.testScores?.toefl || extractedData.testScores?.ielts) && (
+                  <InfoCard icon="📊" title="Test Scores">
+                    <DataRow label="SAT" value={extractedData.testScores.sat} />
+                    <DataRow label="ACT" value={extractedData.testScores.act} />
+                    <DataRow label="GRE" value={extractedData.testScores.gre} />
+                    <DataRow label="GMAT" value={extractedData.testScores.gmat} />
+                    <DataRow label="TOEFL" value={extractedData.testScores.toefl} />
+                    <DataRow label="IELTS" value={extractedData.testScores.ielts} />
+                  </InfoCard>
                 )}
               </div>
             ) : (

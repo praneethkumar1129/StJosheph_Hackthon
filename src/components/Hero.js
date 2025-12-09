@@ -14,7 +14,7 @@ const Hero = () => {
               Automated <span className="text-cyan">Resume</span> Extractor
             </h1>
             <p style={{ fontSize: '1.25rem', lineHeight: '1.6', marginBottom: '32px', color: '#94a3b8' }}>
-              Turn messy resumes into clean, structured JSON in seconds. Support for PDF, DOCX, and scanned images with advanced NLP processing.
+              Transform PDF resumes into structured JSON using AWS Textract and Bedrock AI. Serverless, scalable, and intelligent extraction.
             </p>
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               <button 

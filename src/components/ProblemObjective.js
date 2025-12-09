@@ -5,7 +5,7 @@ const ProblemObjective = () => {
     <section className="section">
       <div className="container">
         <div className="grid grid-2">
-          <div className="card">
+          {/* <div className="card">
             <h3 style={{ color: '#ef4444', marginBottom: '24px' }}>
               🚫 Problem
             </h3>
@@ -28,9 +28,9 @@ const ProblemObjective = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
           
-          <div className="card">
+          {/* <div className="card">
             <h3 style={{ color: '#10b981', marginBottom: '24px' }}>
               ✅ Objective
             </h3>
@@ -53,7 +53,7 @@ const ProblemObjective = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

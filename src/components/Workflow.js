@@ -4,23 +4,23 @@ const Workflow = () => {
   const steps = [
     {
       icon: '📄',
-      title: 'File Input',
-      description: 'Upload resume in PDF, DOCX, or JPG format. System automatically detects file type.'
+      title: 'PDF Upload',
+      description: 'Upload resume in PDF format via API Gateway to AWS Lambda function.'
     },
     {
       icon: '🔍',
-      title: 'Text Extraction',
-      description: 'Extract text using pdfplumber, python-docx, or OCR with OpenCV + Tesseract.'
+      title: 'AWS Textract',
+      description: 'Extract text from PDF using AWS Textract OCR service with high accuracy.'
     },
     {
-      icon: '🧠',
-      title: 'NLP Processing',
-      description: 'Clean text and extract entities using spaCy NER and pattern matching.'
+      icon: '🤖',
+      title: 'Bedrock AI',
+      description: 'Process extracted text with Amazon Titan LLM to intelligently structure data.'
     },
     {
       icon: '📊',
       title: 'JSON Output',
-      description: 'Generate structured JSON with all extracted information ready for HR systems.'
+      description: 'Return structured JSON with 15+ fields ready for HR systems and databases.'
     }
   ];
 
@@ -57,6 +57,57 @@ const Workflow = () => {
         </div>
 
         <div className="card mt-8">
+          <h3 className="text-center mb-4">AWS Architecture</h3>
+          <div style={{
+            background: 'rgba(0, 0, 0, 0.3)',
+            borderRadius: '12px',
+            padding: '32px',
+            marginBottom: '32px',
+            border: '1px solid rgba(255, 153, 0, 0.3)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexWrap: 'wrap', gap: '24px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🌐</div>
+                <strong style={{ color: '#06b6d4' }}>React Frontend</strong>
+                <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>File Upload</p>
+              </div>
+              <div style={{ fontSize: '2rem', color: '#FF9900' }}>→</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🚪</div>
+                <strong style={{ color: '#FF9900' }}>API Gateway</strong>
+                <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>REST API</p>
+              </div>
+              <div style={{ fontSize: '2rem', color: '#FF9900' }}>→</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '8px' }}>λ</div>
+                <strong style={{ color: '#FF9900' }}>Lambda</strong>
+                <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>Python Runtime</p>
+              </div>
+              <div style={{ fontSize: '2rem', color: '#FF9900' }}>↓</div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '48px', marginTop: '24px', flexWrap: 'wrap' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🔍</div>
+                <strong style={{ color: '#FF9900' }}>Textract</strong>
+                <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>Text Extraction</p>
+              </div>
+              <div style={{ fontSize: '2rem', color: '#06b6d4' }}>+</div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🤖</div>
+                <strong style={{ color: '#FF9900' }}>Bedrock Titan</strong>
+                <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>AI Processing</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
+              <div style={{ fontSize: '2rem', color: '#FF9900' }}>↓</div>
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '16px' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '8px' }}>📊</div>
+              <strong style={{ color: '#10b981' }}>Structured JSON</strong>
+              <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px' }}>15+ Fields Extracted</p>
+            </div>
+          </div>
+
           <h3 className="text-center mb-4">Sample JSON Schema</h3>
           <div style={{
             background: 'rgba(0, 0, 0, 0.3)',
