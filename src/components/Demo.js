@@ -46,8 +46,25 @@ const Demo = () => {
       }
 
       const data = await response.json();
-      const resumeData = data.body ? JSON.parse(data.body) : data;
+      console.log('Raw API Response:', data);
       
+      let resumeData;
+      if (data.body) {
+        const parsedBody = JSON.parse(data.body);
+        console.log('Parsed Body:', parsedBody);
+        
+        // Handle rows array format from API
+        if (parsedBody.rows && Array.isArray(parsedBody.rows) && parsedBody.rows.length > 0) {
+          resumeData = parsedBody.rows[0];
+          console.log('Extracted from rows:', resumeData);
+        } else {
+          resumeData = parsedBody;
+        }
+      } else {
+        resumeData = data;
+      }
+      
+      console.log('Final Resume Data:', resumeData);
       setExtractedData(resumeData);
       setShowOutput(true);
     } catch (err) {
@@ -199,6 +216,9 @@ const Demo = () => {
                   <DataRow label="Name" value={extractedData.name} />
                   <DataRow label="Email" value={extractedData.email} />
                   <DataRow label="Phone" value={extractedData.phoneNumber} />
+                  {!extractedData.name && !extractedData.email && !extractedData.phoneNumber && (
+                    <p style={{ color: '#94a3b8', fontStyle: 'italic' }}>No personal information found</p>
+                  )}
                 </InfoCard>
 
                 {extractedData.highSchoolName && (
@@ -279,6 +299,21 @@ const Demo = () => {
                     <DataRow label="IELTS" value={extractedData.testScores.ielts} />
                   </InfoCard>
                 )}
+                
+                {/* Debug Section - Remove in production */}
+                <InfoCard icon="🔍" title="Debug - Raw Data">
+                  <div style={{
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    fontFamily: 'monospace',
+                    fontSize: '0.75rem',
+                    maxHeight: '200px',
+                    overflow: 'auto'
+                  }}>
+                    <pre>{JSON.stringify(extractedData, null, 2)}</pre>
+                  </div>
+                </InfoCard>
               </div>
             ) : (
               <div style={{
